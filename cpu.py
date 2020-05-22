@@ -8,6 +8,10 @@ PUSH = 69
 POP = 70
 # Add CMP
 CMP = 167
+# Add JMP, JEQ, JNE
+JMP = 84
+JEQ = 85
+JNE = 86
 
 # Implement the CPU constructor
 class CPU:
@@ -26,6 +30,10 @@ class CPU:
 		self.branch_table[MUL] = self.mul
 		self.branch_table[PUSH] = self.push
 		self.branch_table[POP] = self.pop
+		self.branch_table[CMP] = self.cmp
+		self.branch_table[JMP] = self.jmp
+		self.branch_table[JEQ] = self.jeq
+		self.branch_table[JNE] = self.jne
 
 	# takes file input
 	def load(self):
@@ -54,9 +62,26 @@ class CPU:
 		b = self.register[reg_b]
 
 		if op == "ADD":
-			self.register[reg_a] += self.register[reg_b]
+			self.register[a] += self.register[b]
 		elif op == "MUL":
-			self.register[reg_a] *= self.register[reg_b]
+			self.register[a] *= self.register[b]
+		elif op == "CMP":
+			# If they are equal, set the Equal E flag to 1, otherwise set it to 0.
+			if a == b:
+				self.flags["E"] = 1
+			else:
+				self.flags["E"] = 0
+			# If registerA is less than registerB, set the Less-than L flag to 1, otherwise set it to 0.
+			if a < b:
+				self.flags["L"] = 1
+			else:
+				self.flags["L"] = 0
+			# If registerA is greater than registerB, set the Greater-than G flag to 1, otherwise set it to 0.
+			if a > b:
+				self.flags["G"] = 1
+			else:
+				self.flags["G"] = 0
+
 		else:
 			raise Exception("Unsupported ALU operation")
 
@@ -108,6 +133,21 @@ class CPU:
 	# CMP compares two operands
 	def cmp(self, operand_a, operand_b):
 		self.alu("CMP", operand_a, operand_b)
+
+	# Implement JMP instruction
+	# JMP Jumps to the address stored in the given register.
+	def jmp(self, operand_a, operand_b):
+		pass
+
+	# Implement the JEQ instruction
+	# JEQ job is if equal flag is set (true), jump to the address stored in the given register.
+	def jeq(self, operand_a, operand_b):
+		pass
+
+	# Implement the JNE instruction
+	# JNE is If E flag is clear (false, 0), jump to the address stored in the given register.
+	def jne(self, operand_a, operand_b):
+		pass
 
     # Implement the core of run()
 	def run(self):
