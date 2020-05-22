@@ -22,7 +22,7 @@ class CPU:
 		self.pc = 0
 		self.register[7] = 0xF4
 		self.sp = 7
-		self.equal = {}
+		self.flags = {}
 		# Construct a branch table - create a dictionary for the branch table
 		self.branch_table = {}
 		self.branch_table[LDI] = self.ldi
@@ -165,6 +165,9 @@ class CPU:
         # not ending
 		halted = False
 
+		# if a jump instruction was to happen
+		jump = [JMP, JNE, JEQ]
+
         # if its not ending
 		while not halted:
             # Instruction Register - is the register which holds the instruction which is currently been executed.
@@ -178,6 +181,9 @@ class CPU:
 			if IR == HLT:
                 # then end
 				halted = True
+			# or if the IR has a jump instruction to do
+			elif IR in jump:
+				self.branch_table[IR](operand_a, operand_b)
             # or if the IR has an instruction to do
 			elif IR in self.branch_table:
                 # the instructions are in the branch_table
