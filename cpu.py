@@ -137,17 +137,26 @@ class CPU:
 	# Implement JMP instruction
 	# JMP Jumps to the address stored in the given register.
 	def jmp(self, operand_a, operand_b):
-		pass
+		# Set the PC to the address stored in the given register.
+		self.pc = self.register[operand_a]
 
 	# Implement the JEQ instruction
 	# JEQ job is if equal flag is set (true), jump to the address stored in the given register.
 	def jeq(self, operand_a, operand_b):
-		pass
+		if self.flags["E"] == 1:
+			self.pc = self.register[operand_a]
+		else:
+			# if not, jump onto the 2nd
+			self.pc += 2
 
 	# Implement the JNE instruction
-	# JNE is If E flag is clear (false, 0), jump to the address stored in the given register.
+	# JNE is if E flag is clear (false, 0), jump to the address stored in the given register.
 	def jne(self, operand_a, operand_b):
-		pass
+		if self.flags["E"] == 0:
+			self.pc = self.register[operand_a]
+		else:
+			# if not jump onto the 2nd
+			self.pc += 2
 
     # Implement the core of run()
 	def run(self):
