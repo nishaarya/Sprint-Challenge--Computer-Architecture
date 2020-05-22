@@ -6,6 +6,8 @@ HLT = 1
 MUL = 162
 PUSH = 69
 POP = 70
+# Add CMP
+CMP = 167
 
 # Implement the CPU constructor
 class CPU:
@@ -16,6 +18,7 @@ class CPU:
 		self.pc = 0
 		self.register[7] = 0xF4
 		self.sp = 7
+		self.equal = {}
 		# Construct a branch table - create a dictionary for the branch table
 		self.branch_table = {}
 		self.branch_table[LDI] = self.ldi
@@ -100,6 +103,11 @@ class CPU:
 		val = self.read_ram(self.register[self.sp])
 		self.register[operand_a] = val
 		self.register[self.sp] += 1
+	
+	# Implement the CMP instruction
+	# CMP compares two operands
+	def cmp(self, operand_a, operand_b):
+		self.alu("CMP", operand_a, operand_b)
 
     # Implement the core of run()
 	def run(self):
